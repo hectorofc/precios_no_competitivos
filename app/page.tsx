@@ -63,7 +63,7 @@ export default function Home() {
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Producto <span style={{ color: 'red' }}>*</span></label>
+          <label style={labelStyle}>SKU producto <span style={{ color: 'red' }}>*</span></label>
           <input style={inputStyle} type="text" name="producto" value={form.producto} onChange={handleChange} required />
         </div>
 

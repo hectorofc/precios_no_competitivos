@@ -19,10 +19,13 @@ export default function Reportes() {
 
   const totalRegistros = filtrados.length;
   const montoTotal = filtrados.reduce((acc, d) => acc + (Number(d.monto_negocio) || 0), 0);
-  const diferenciasValidas = filtrados.filter(d => d.precio_ofrecido && d.precio_competencia);
-  const diferenciaPromedio = diferenciasValidas.length
-    ? diferenciasValidas.reduce((acc, d) => acc + (Number(d.precio_ofrecido) - Number(d.precio_competencia)), 0) / diferenciasValidas.length
+
+  const conCostoYCompetencia = filtrados.filter(d => Number(d.precio_costo) > 0 && d.precio_competencia);
+  const diferenciaPorcentaje = conCostoYCompetencia.length
+    ? conCostoYCompetencia.reduce((acc, d) => acc + ((Number(d.precio_competencia) - Number(d.precio_costo)) / Number(d.precio_costo)) * 100, 0) / conCostoYCompetencia.length
     : 0;
+
+  const productosDistintos = new Set(filtrados.map(d => d.producto).filter(Boolean)).size;
 
   const cellStyle = { padding: 8, borderBottom: `1px solid ${BEIGE}33`, color: BEIGE, fontSize: 13 };
   const headStyle = { ...cellStyle, fontWeight: 700, borderBottom: `2px solid ${BEIGE}` };
@@ -34,7 +37,7 @@ export default function Reportes() {
       <h1 style={{ color: BEIGE }}>Reporte de negocios perdidos por precio</h1>
       <a href="/" style={{ color: BEIGE, fontSize: 13 }}>← Volver al formulario</a>
 
-      <div style={{ display: 'flex', gap: 20, margin: '24px 0' }}>
+      <div style={{ display: 'flex', gap: 20, margin: '24px 0', flexWrap: 'wrap' as const }}>
         <div style={{ border: `1px solid ${BEIGE}`, borderRadius: 8, padding: 16, minWidth: 160 }}>
           <div style={{ fontSize: 13 }}>Negocios registrados</div>
           <div style={{ fontSize: 24, fontWeight: 700 }}>{totalRegistros}</div>
@@ -44,13 +47,17 @@ export default function Reportes() {
           <div style={{ fontSize: 24, fontWeight: 700 }}>${montoTotal.toLocaleString()}</div>
         </div>
         <div style={{ border: `1px solid ${BEIGE}`, borderRadius: 8, padding: 16, minWidth: 160 }}>
-          <div style={{ fontSize: 13 }}>Diferencia de precio promedio</div>
-          <div style={{ fontSize: 24, fontWeight: 700 }}>${diferenciaPromedio.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+          <div style={{ fontSize: 13 }}>Diferencia competencia vs. costo</div>
+          <div style={{ fontSize: 24, fontWeight: 700 }}>{diferenciaPorcentaje.toLocaleString(undefined, { maximumFractionDigits: 1 })}%</div>
+        </div>
+        <div style={{ border: `1px solid ${BEIGE}`, borderRadius: 8, padding: 16, minWidth: 160 }}>
+          <div style={{ fontSize: 13 }}>Productos distintos</div>
+          <div style={{ fontSize: 24, fontWeight: 700 }}>{productosDistintos}</div>
         </div>
       </div>
 
       <div style={{ marginBottom: 16 }}>
-        <label style={{ marginRight: 8 }}>Filtrar por producto:</label>
+        <label style={{ marginRight: 8 }}>Filtrar por SKU producto:</label>
         <select value={filtroProducto} onChange={e => setFiltroProducto(e.target.value)}
           style={{ padding: 6, borderRadius: 6, border: `1px solid ${BEIGE}`, background: 'transparent', color: BEIGE }}>
           <option value="">Todos</option>
@@ -64,33 +71,5 @@ export default function Reportes() {
             <th style={headStyle}>Fecha</th>
             <th style={headStyle}>Vendedor</th>
             <th style={headStyle}>Cliente</th>
-            <th style={headStyle}>Producto</th>
-            <th style={headStyle}>Monto negocio</th>
-            <th style={headStyle}>Precio costo</th>
-            <th style={headStyle}>Precio ofrecido</th>
-            <th style={headStyle}>Precio competencia</th>
-            <th style={headStyle}>Competencia</th>
-            <th style={headStyle}>Notas</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtrados.map((d, i) => (
-            <tr key={i}>
-              <td style={cellStyle}>{d.fecha ? new Date(d.fecha).toLocaleDateString() : ''}</td>
-              <td style={cellStyle}>{d.vendedor}</td>
-              <td style={cellStyle}>{d.cliente}</td>
-              <td style={cellStyle}>{d.producto}</td>
-              <td style={cellStyle}>{d.monto_negocio}</td>
-              <td style={cellStyle}>{d.precio_costo}</td>
-              <td style={cellStyle}>{d.precio_ofrecido}</td>
-              <td style={cellStyle}>{d.precio_competencia}</td>
-              <td style={cellStyle}>{d.nombre_competencia}</td>
-              <td style={cellStyle}>{d.notas}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {filtrados.length === 0 && <p>No hay registros todavía.</p>}
-    </div>
-  );
-}
+            <th style={headStyle}>SKU producto</th>
+            <th style={headStyle}>Monto
