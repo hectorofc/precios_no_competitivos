@@ -51,7 +51,7 @@ export default function Reportes() {
           <div style={{ fontSize: 24, fontWeight: 700 }}>{diferenciaPorcentaje.toLocaleString(undefined, { maximumFractionDigits: 1 })}%</div>
         </div>
         <div style={{ border: `1px solid ${BEIGE}`, borderRadius: 8, padding: 16, minWidth: 160 }}>
-          <div style={{ fontSize: 13 }}>Productos distintos</div>
+          <div style={{ fontSize: 13 }}>SKU productos distintos</div>
           <div style={{ fontSize: 24, fontWeight: 700 }}>{productosDistintos}</div>
         </div>
       </div>
@@ -72,4 +72,32 @@ export default function Reportes() {
             <th style={headStyle}>Vendedor</th>
             <th style={headStyle}>Cliente</th>
             <th style={headStyle}>SKU producto</th>
-            <th style={headStyle}>Monto
+            <th style={headStyle}>Monto negocio</th>
+            <th style={headStyle}>Precio costo</th>
+            <th style={headStyle}>Precio ofrecido</th>
+            <th style={headStyle}>Precio competencia</th>
+            <th style={headStyle}>Competencia</th>
+            <th style={headStyle}>Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filtrados.map((d, i) => (
+            <tr key={i}>
+              <td style={cellStyle}>{d.fecha ? new Date(d.fecha).toLocaleDateString() : ''}</td>
+              <td style={cellStyle}>{d.vendedor}</td>
+              <td style={cellStyle}>{d.cliente}</td>
+              <td style={cellStyle}>{d.producto}</td>
+              <td style={cellStyle}>{d.monto_negocio}</td>
+              <td style={cellStyle}>{d.precio_costo}</td>
+              <td style={cellStyle}>{d.precio_ofrecido}</td>
+              <td style={cellStyle}>{d.precio_competencia}</td>
+              <td style={cellStyle}>{d.nombre_competencia}</td>
+              <td style={cellStyle}>{d.notas}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {filtrados.length === 0 && <p>No hay registros todavía.</p>}
+    </div>
+  );
+}
