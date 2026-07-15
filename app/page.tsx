@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
 
+const BEIGE = '#D9C9A3';
+
 export default function Home() {
   const [form, setForm] = useState({
-    fecha: '', vendedor: '', cliente: '', producto: '',
+    fecha: '', vendedor: '', cliente: '', producto: '', monto_negocio: '',
     precio_costo: '', precio_ofrecido: '', precio_competencia: '',
     nombre_competencia: '', notas: ''
   });
@@ -23,16 +25,16 @@ export default function Home() {
     setEnviado(true);
   };
 
-  const labelStyle = { fontWeight: 600, fontSize: 14, color: '#333' };
-  const inputStyle = { padding: 8, borderRadius: 6, border: '1px solid #ccc', fontSize: 14 };
+  const labelStyle = { fontWeight: 600, fontSize: 14, color: BEIGE };
+  const inputStyle = { padding: 8, borderRadius: 6, border: `1px solid ${BEIGE}`, fontSize: 14, color: BEIGE, background: 'transparent' };
   const fieldStyle = { display: 'flex', flexDirection: 'column' as const, gap: 4 };
 
   if (enviado) {
     return (
       <div style={{ padding: 40, fontFamily: 'sans-serif' }}>
-        <h2>¡Registrado! ✅</h2>
-        <button onClick={() => { setEnviado(false); setForm({ fecha:'',vendedor:'',cliente:'',producto:'',precio_costo:'',precio_ofrecido:'',precio_competencia:'',nombre_competencia:'',notas:'' }); }}
-          style={{ padding: '8px 16px', borderRadius: 6, cursor: 'pointer' }}>
+        <h2 style={{ color: BEIGE }}>¡Registrado! ✅</h2>
+        <button onClick={() => { setEnviado(false); setForm({ fecha:'',vendedor:'',cliente:'',producto:'',monto_negocio:'',precio_costo:'',precio_ofrecido:'',precio_competencia:'',nombre_competencia:'',notas:'' }); }}
+          style={{ padding: '8px 16px', borderRadius: 6, cursor: 'pointer', border: `1px solid ${BEIGE}`, color: BEIGE, background: 'transparent' }}>
           Registrar otro negocio
         </button>
       </div>
@@ -41,8 +43,8 @@ export default function Home() {
 
   return (
     <div style={{ padding: 40, fontFamily: 'sans-serif', maxWidth: 480, margin: '0 auto' }}>
-      <h1>Registro de negocio perdido</h1>
-      <p style={{ fontSize: 13, color: '#666' }}>Los campos con <span style={{ color: 'red' }}>*</span> son obligatorios</p>
+      <h1 style={{ color: BEIGE }}>Registro de negocio perdido por precio</h1>
+      <p style={{ fontSize: 13, color: BEIGE }}>Los campos con <span style={{ color: 'red' }}>*</span> son obligatorios</p>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
         <div style={fieldStyle}>
@@ -66,31 +68,36 @@ export default function Home() {
         </div>
 
         <div style={fieldStyle}>
+          <label style={labelStyle}>Monto de negocio <span style={{ color: 'red' }}>*</span></label>
+          <input style={inputStyle} type="number" name="monto_negocio" value={form.monto_negocio} onChange={handleChange} required />
+        </div>
+
+        <div style={fieldStyle}>
           <label style={labelStyle}>Precio costo</label>
           <input style={inputStyle} type="number" name="precio_costo" value={form.precio_costo} onChange={handleChange} />
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Precio que ofrecimos</label>
-          <input style={inputStyle} type="number" name="precio_ofrecido" value={form.precio_ofrecido} onChange={handleChange} />
+          <label style={labelStyle}>Precio que ofrecimos <span style={{ color: 'red' }}>*</span></label>
+          <input style={inputStyle} type="number" name="precio_ofrecido" value={form.precio_ofrecido} onChange={handleChange} required />
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Precio competencia</label>
-          <input style={inputStyle} type="number" name="precio_competencia" value={form.precio_competencia} onChange={handleChange} />
+          <label style={labelStyle}>Precio competencia <span style={{ color: 'red' }}>*</span></label>
+          <input style={inputStyle} type="number" name="precio_competencia" value={form.precio_competencia} onChange={handleChange} required />
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Nombre competencia</label>
-          <input style={inputStyle} type="text" name="nombre_competencia" value={form.nombre_competencia} onChange={handleChange} />
+          <label style={labelStyle}>Nombre competencia <span style={{ color: 'red' }}>*</span></label>
+          <input style={inputStyle} type="text" name="nombre_competencia" value={form.nombre_competencia} onChange={handleChange} required />
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Notas</label>
-          <textarea style={inputStyle} name="notas" value={form.notas} onChange={handleChange} rows={3} />
+          <label style={labelStyle}>Notas <span style={{ color: 'red' }}>*</span></label>
+          <textarea style={inputStyle} name="notas" value={form.notas} onChange={handleChange} rows={3} required />
         </div>
 
-        <button type="submit" style={{ padding: '10px 16px', borderRadius: 6, background: '#111', color: 'white', border: 'none', cursor: 'pointer', fontSize: 15 }}>
+        <button type="submit" style={{ padding: '10px 16px', borderRadius: 6, background: BEIGE, color: '#222', border: 'none', cursor: 'pointer', fontSize: 15, fontWeight: 600 }}>
           Guardar
         </button>
       </form>
